@@ -58,11 +58,54 @@ export type CampoConfig =
       obrigatorio?: boolean;
     };
 
+// Sem funções aqui de propósito: essa config nasce em Server Components
+// (as páginas de cadastro) e é passada como prop para este Client
+// Component — funções não atravessam essa fronteira em produção. Por
+// isso a formatação é 100% declarativa (dado serializável).
 export type ColunaConfig<T> = {
   chave: keyof T & string;
   titulo: string;
-  formatar?: (registro: T) => React.ReactNode;
+  /** lê um campo relacionado (join), ex.: "etapas_processo.nome" */
+  caminho?: string;
+  /** mapeia o valor bruto do campo para um rótulo, ex.: { GALPAO: "Galpão" } */
+  mapaValores?: Record<string, string>;
+  /** exibe um rótulo conforme o campo (booleano) seja verdadeiro/falso */
+  booleano?: { sim: string; nao: string };
+  /** concatena os rótulos de vários campos booleanos verdadeiros (ex.: papéis de um parceiro) */
+  multiBooleano?: { campo: string; rotulo: string }[];
 };
+
+function renderColuna<T extends Registro>(
+  registro: T,
+  coluna: ColunaConfig<T>,
+): React.ReactNode {
+  if (coluna.multiBooleano) {
+    const rotulos = coluna.multiBooleano
+      .filter((m) => Boolean((registro as Record<string, unknown>)[m.campo]))
+      .map((m) => m.rotulo);
+    return rotulos.join(", ") || "—";
+  }
+  if (coluna.caminho) {
+    const valor = coluna.caminho
+      .split(".")
+      .reduce<unknown>(
+        (acc, chave) =>
+          acc && typeof acc === "object"
+            ? (acc as Record<string, unknown>)[chave]
+            : undefined,
+        registro,
+      );
+    return (valor as React.ReactNode) ?? "—";
+  }
+  const bruto = registro[coluna.chave];
+  if (coluna.booleano) {
+    return bruto ? coluna.booleano.sim : coluna.booleano.nao;
+  }
+  if (coluna.mapaValores) {
+    return coluna.mapaValores[String(bruto)] ?? String(bruto ?? "—");
+  }
+  return (bruto as React.ReactNode) ?? "—";
+}
 
 type Registro = { id: string; ativo?: boolean } & Record<string, unknown>;
 
@@ -229,7 +272,7 @@ export function CadastroCrud<T extends Registro>({
                 <TableRow key={registro.id}>
                   {colunas.map((c) => (
                     <TableCell key={c.chave}>
-                      {c.formatar ? c.formatar(registro) : String(registro[c.chave] ?? "—")}
+                      {renderColuna(registro, c)}
                     </TableCell>
                   ))}
                   <TableCell>

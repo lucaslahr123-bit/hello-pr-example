@@ -26,16 +26,8 @@ export default async function ParametrosProcessoPage() {
       ordenarPor="material_id"
       selecao="*, materiais(nome), etapas_processo(nome)"
       colunas={[
-        {
-          chave: "material_id",
-          titulo: "Material",
-          formatar: (r) => (r as { materiais?: { nome: string } }).materiais?.nome ?? "—",
-        },
-        {
-          chave: "etapa_id",
-          titulo: "Etapa",
-          formatar: (r) => (r as { etapas_processo?: { nome: string } }).etapas_processo?.nome ?? "—",
-        },
+        { chave: "material_id", titulo: "Material", caminho: "materiais.nome" },
+        { chave: "etapa_id", titulo: "Etapa", caminho: "etapas_processo.nome" },
         { chave: "perda_min_pct", titulo: "Perda mín. (%)" },
         { chave: "perda_max_pct", titulo: "Perda máx. (%)" },
         { chave: "rendimento_alvo_pct", titulo: "Rendimento alvo (%)" },

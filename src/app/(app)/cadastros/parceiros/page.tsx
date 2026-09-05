@@ -20,14 +20,12 @@ export default async function ParceirosPage() {
         {
           chave: "eh_fornecedor",
           titulo: "Papéis",
-          formatar: (r) => {
-            const papeis: string[] = [];
-            if (r.eh_fornecedor) papeis.push("Fornecedor");
-            if (r.eh_cliente) papeis.push("Cliente");
-            if (r.eh_proprietario_terceiro) papeis.push("Proprietário terceiro");
-            if (r.eh_transportadora) papeis.push("Transportadora");
-            return papeis.join(", ") || "—";
-          },
+          multiBooleano: [
+            { campo: "eh_fornecedor", rotulo: "Fornecedor" },
+            { campo: "eh_cliente", rotulo: "Cliente" },
+            { campo: "eh_proprietario_terceiro", rotulo: "Proprietário terceiro" },
+            { campo: "eh_transportadora", rotulo: "Transportadora" },
+          ],
         },
       ]}
       campos={[

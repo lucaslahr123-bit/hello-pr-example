@@ -25,7 +25,7 @@ export default async function LocaisEstoquePage() {
         {
           chave: "tipo",
           titulo: "Tipo",
-          formatar: (r) => OPCOES_TIPO.find((o) => o.value === r.tipo)?.label ?? String(r.tipo ?? "—"),
+          mapaValores: Object.fromEntries(OPCOES_TIPO.map((o) => [o.value, o.label])),
         },
       ]}
       campos={[

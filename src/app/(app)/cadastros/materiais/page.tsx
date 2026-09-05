@@ -35,17 +35,13 @@ export default async function MateriaisPage() {
       selecao="*, tipos_polimero(nome), cores(nome)"
       colunas={[
         { chave: "nome", titulo: "Nome" },
+        { chave: "tipo_polimero_id", titulo: "Polímero", caminho: "tipos_polimero.nome" },
+        { chave: "cor_id", titulo: "Cor", caminho: "cores.nome" },
         {
-          chave: "tipo_polimero_id",
-          titulo: "Polímero",
-          formatar: (r) => (r as { tipos_polimero?: { nome: string } }).tipos_polimero?.nome ?? "—",
+          chave: "estagio",
+          titulo: "Estágio",
+          mapaValores: Object.fromEntries(OPCOES_ESTAGIO.map((o) => [o.value, o.label])),
         },
-        {
-          chave: "cor_id",
-          titulo: "Cor",
-          formatar: (r) => (r as { cores?: { nome: string } }).cores?.nome ?? "—",
-        },
-        { chave: "estagio", titulo: "Estágio" },
         { chave: "estoque_minimo_kg", titulo: "Estoque mínimo (kg)" },
       ]}
       campos={[

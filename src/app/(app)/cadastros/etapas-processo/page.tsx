@@ -24,7 +24,7 @@ export default async function EtapasProcessoPage() {
         {
           chave: "gera_perda",
           titulo: "Gera perda?",
-          formatar: (r) => (r.gera_perda ? "Sim" : "Não"),
+          booleano: { sim: "Sim", nao: "Não" },
         },
       ]}
       campos={[

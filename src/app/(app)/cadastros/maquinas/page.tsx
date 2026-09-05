@@ -22,11 +22,7 @@ export default async function MaquinasPage() {
       selecao="*, etapas_processo(nome)"
       colunas={[
         { chave: "nome", titulo: "Nome" },
-        {
-          chave: "etapa_id",
-          titulo: "Etapa",
-          formatar: (r) => (r as { etapas_processo?: { nome: string } }).etapas_processo?.nome ?? "—",
-        },
+        { chave: "etapa_id", titulo: "Etapa", caminho: "etapas_processo.nome" },
         { chave: "capacidade_nominal_kg_h", titulo: "Capacidade (kg/h)" },
       ]}
       campos={[
