@@ -120,12 +120,15 @@ end $$;
 do $$
 declare
   t text;
+  -- Só tabelas com empresa_id própria entram aqui. expedicao_itens,
+  -- op_consumos, op_producoes, op_perdas e paradas não têm empresa_id
+  -- (a empresa vem da OP/expedição pai) — essas ganham política própria,
+  -- via join, mais abaixo neste arquivo.
   movimento text[] := array[
     'lotes','movimentacoes_estoque','recebimentos','inventarios',
-    'expedicoes','expedicao_itens','tabela_precos_servico','prestacao_contas',
-    'ordens_producao','op_consumos','op_producoes','op_perdas','paradas',
-    'leituras_energia','analises_qualidade','nao_conformidades',
-    'metas','anexos'
+    'expedicoes','tabela_precos_servico','prestacao_contas',
+    'ordens_producao','leituras_energia','analises_qualidade',
+    'nao_conformidades','metas','anexos'
   ];
 begin
   foreach t in array movimento loop
